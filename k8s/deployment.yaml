@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: react-frontend
+  template:
+    metadata:
+      labels:
+        app: react-frontend
+    spec:
+      containers:
+        - name: react-frontend
+          image: nousath/react-frontend:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: REACT_APP_API_URL
+              value: "http://php-backend-service:5000"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: php-backend
+  template:
+    metadata:
+      labels:
+        app: php-backend
+    spec:
+      containers:
+        - name: php-backend
+          image: nousath/php-backend:latest
+          ports:
+            - containerPort: 5000
+
